@@ -1,4 +1,5 @@
 import 'package:chewie/chewie.dart';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
@@ -6,12 +7,22 @@ import 'package:video_player/video_player.dart';
 class HomeController extends GetxController {
   VideoPlayerController? videoPlayerController;
   ChewieController? chewieController;
+  FlickManager? flickManager;
+  String? name;
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     initializePlayer();
+  }
+
+  @override
+  void onDispose() {
+    // TODO: implement onClose
+    super.onClose();
+    videoPlayerController?.dispose();
+    chewieController?.dispose();
   }
 
   @override
@@ -23,6 +34,12 @@ class HomeController extends GetxController {
   }
 
   Future<void> initializePlayer() async {
+    flickManager = FlickManager(
+        videoPlayerController: VideoPlayerController.network(
+            "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"),
+        autoInitialize: true,
+        autoPlay: true);
+
     videoPlayerController = VideoPlayerController.network(
         'https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4');
 
@@ -45,5 +62,11 @@ class HomeController extends GetxController {
     );
 
     update();
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
   }
 }
